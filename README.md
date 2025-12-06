@@ -50,27 +50,6 @@ A React Native calendar application with Firebase authentication, event manageme
    - **Android**: Download `google-services.json` → `android/app/`
    - **iOS**: Download `GoogleService-Info.plist` → `ios/Calendar/`
 
-**Important**: These files contain your Firebase API keys and are automatically gitignored for security. They are:
-
-- Used by Firebase SDK to connect your app to your Firebase project
-- Required for authentication and Firestore database access
-- Automatically loaded at app startup (no manual initialization needed)
-- Never commit these files to version control
-
-### Firestore Security Rules
-
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /events/{eventId} {
-      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
-      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
-    }
-  }
-}
-```
-
 ### Firestore Indexes
 
 Create composite indexes for efficient queries:
@@ -119,19 +98,6 @@ npm run android
 npm run ios
 ```
 
-## Android Permissions
-
-The app requires the following permissions:
-
-- **POST_NOTIFICATIONS** - Display notifications (Android 13+)
-- **SCHEDULE_EXACT_ALARM** - Schedule notifications at exact times (Android 12+)
-- **USE_EXACT_ALARM** - Use alarm functionality (Android 12+)
-- **INTERNET** - Firebase connectivity
-- **USE_BIOMETRIC** - Fingerprint authentication
-- **USE_FINGERPRINT** - Legacy fingerprint support
-
-## Testing Biometric Authentication on Emulator
-
 ### Android Emulator Setup
 
 1. Enable screen lock:
@@ -163,39 +129,14 @@ The app requires the following permissions:
 ## Project Structure
 
 ```
-Calendar/
-├── src/
-│   ├── components/         # Reusable UI components
-│   │   ├── Calendar/       # Calendar grid component
-│   │   ├── DayView/        # Single day event view
-│   │   ├── EventList/      # Event list component
-│   │   ├── EventModal/     # Event creation/edit modal
-│   │   ├── Header/         # Custom header component
-│   │   └── ViewToggle/     # Month/Day view toggle
-│   ├── contexts/           # React Context providers
-│   │   └── AuthContext.tsx # Authentication state
-│   ├── navigation/         # Navigation configuration
-│   │   ├── AppNavigator.tsx   # Main app navigation (tabs)
-│   │   ├── AuthNavigator.tsx  # Auth flow navigation
-│   │   └── RootNavigator.tsx  # Root navigation switch
-│   ├── screens/            # Screen components
-│   │   ├── Calendar/       # Calendar screen
-│   │   ├── SignIn/         # Sign in screen
-│   │   ├── SignUp/         # Sign up screen
-│   │   └── User/           # User profile screen
-│   ├── services/           # Business logic services
-│   │   ├── authService.ts     # Authentication operations
-│   │   ├── biometricService.ts # Biometric authentication
-│   │   ├── eventService.ts    # Event CRUD operations
-│   │   └── notificationService.ts # Notification scheduling
-│   ├── types/              # TypeScript type definitions
-│   ├── utils/              # Utility functions
-│   │   └── dateUtils.ts    # Date formatting and manipulation
-│   └── config/             # Configuration files
-│       └── firebase.ts     # Firebase initialization
-├── android/                # Android native code
-├── ios/                    # iOS native code
-└── App.tsx                 # App entry point
+components/         # Reusable UI components
+contexts/           # React Context providers
+navigation/         # Navigation configuration
+screens/            # Screen components
+services/           # Business logic services
+android/            # Android native code
+ios/                # iOS native code
+App.tsx             # App entry point
 ```
 
 ## Known Issues & Troubleshooting
@@ -204,19 +145,7 @@ Calendar/
 
 **Emulator**: Android emulators are unreliable for scheduled notifications. Test on a physical device.
 
-**MIUI/Xiaomi Devices**:
-
-- Go to Settings → Battery & performance → App battery saver
-- Select Calendar app → No restrictions
-- This prevents MIUI from killing background processes
-
 **Android 13+**: Ensure POST_NOTIFICATIONS permission is granted when prompted.
-
-### Biometric Authentication Issues
-
-- Ensure screen lock is enabled on device/emulator
-- Verify biometric enrollment in device settings
-- Check that USE_BIOMETRIC permission is in manifest
 
 ### Build Errors
 
@@ -233,13 +162,6 @@ npm run android
 cd ios && pod deinstall && pod install && cd ..
 npm run ios
 ```
-
-## Development Tips
-
-- Use LogBox to suppress known warnings (VirtualizedList)
-- Firebase listeners auto-unsubscribe on component unmount
-- Date handling uses local timezone (not UTC) for consistency
-- Notifications require channel creation before scheduling
 
 ## Testing
 
