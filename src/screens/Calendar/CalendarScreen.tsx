@@ -49,12 +49,10 @@ const CalendarScreen: React.FC = () => {
   useEffect(() => {
     if (!user?.uid) return;
 
-    console.log('Loading events for date:', selectedDate.toDateString());
     const unsubscribe = eventService.getEventsForDate(
       user.uid,
       selectedDate,
       dayEvents => {
-        console.log('Day events received:', dayEvents.length, dayEvents);
         setSelectedDateEvents(dayEvents);
       },
     );
@@ -63,13 +61,11 @@ const CalendarScreen: React.FC = () => {
   }, [user, selectedDate, viewMode]);
 
   const handleAddEvent = () => {
-    console.log('Add event clicked - clearing selected event');
     setSelectedEvent(null);
     setModalVisible(true);
   };
 
   const handleEditEvent = (event: ICalendarEvent) => {
-    console.log('Edit event clicked:', event.id, event.title);
     setSelectedEvent(event);
     setModalVisible(true);
   };
@@ -93,7 +89,6 @@ const CalendarScreen: React.FC = () => {
         const eventId = await eventService.createEvent(user.uid, eventData);
 
         if (eventData.notificationEnabled) {
-          console.log('About to call scheduleEventNotification');
           const notifId = await notificationService.scheduleEventNotification({
             id: eventId,
             userId: user.uid,
@@ -101,7 +96,6 @@ const CalendarScreen: React.FC = () => {
             createdAt: new Date(),
             updatedAt: new Date(),
           });
-          console.log('scheduleEventNotification returned:', notifId);
         }
       }
     } catch (error) {

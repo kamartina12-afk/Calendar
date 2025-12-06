@@ -15,17 +15,14 @@ function App() {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
 
     const requestNotificationPermissions = async () => {
-      console.log('[APP] Requesting notification permission at startup');
       if (Platform.OS === 'android' && Platform.Version >= 33) {
         try {
           const granted = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
           );
-          console.log('[APP] POST_NOTIFICATIONS permission:', granted);
 
           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
             await notificationService.createChannel();
-            console.log('[APP] Notification channel created');
           }
         } catch (error) {
           console.error(
@@ -36,7 +33,6 @@ function App() {
       } else {
         try {
           await notificationService.createChannel();
-          console.log('[APP] Notification channel created');
         } catch (error) {
           console.error('[APP] Error creating notification channel:', error);
         }

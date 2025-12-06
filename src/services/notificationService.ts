@@ -4,9 +4,7 @@ import { ICalendarEvent } from '../types/event';
 export const notificationService = {
   async requestPermission(): Promise<boolean> {
     try {
-      console.log('[NOTIF] Requesting permission...');
       const settings = await notifee.requestPermission();
-      console.log('[NOTIF] Permission settings:', JSON.stringify(settings));
       return settings.authorizationStatus >= 1;
     } catch (error) {
       console.error('[NOTIF] Error requesting permission:', error);
@@ -24,17 +22,11 @@ export const notificationService = {
   },
 
   async scheduleEventNotification(event: ICalendarEvent): Promise<string | null> {
-    console.log('[NOTIF] Starting scheduleEventNotification for:', event.id, event.title);
     try {
-      console.log('[NOTIF] Inside try block');
 
       const [hours, minutes] = event.time.split(':').map(Number);
       const eventDateTime = new Date(event.date);
       eventDateTime.setHours(hours, minutes, 0, 0);
-
-      console.log('[NOTIF] Event date/time:', eventDateTime.toISOString());
-      console.log('[NOTIF] Current time:', new Date().toISOString());
-      console.log('[NOTIF] Time difference (ms):', eventDateTime.getTime() - Date.now());
 
       if (eventDateTime.getTime() <= Date.now()) {
         console.warn('[NOTIF] Event time is in the past');
@@ -65,7 +57,6 @@ export const notificationService = {
         trigger,
       );
 
-      console.log('[NOTIF] Notification scheduled successfully:', notificationId);
       return notificationId;
     } catch (error) {
       console.error('Error scheduling notification:', error);
