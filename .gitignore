@@ -71,6 +71,7 @@ android/.gradle/
 ios/build/
 *.jsbundle
 *.map
+test-bundle.js
 
 # node.js
 #
