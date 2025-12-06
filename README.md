@@ -139,14 +139,6 @@ ios/                # iOS native code
 App.tsx             # App entry point
 ```
 
-## Known Issues & Troubleshooting
-
-### Notifications Not Appearing
-
-**Emulator**: Android emulators are unreliable for scheduled notifications. Test on a physical device.
-
-**Android 13+**: Ensure POST_NOTIFICATIONS permission is granted when prompted.
-
 ### Build Errors
 
 **Android**:
